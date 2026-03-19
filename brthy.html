@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+color:white;
+text-align:center;
+overflow:hidden;
+transition:1s;
+}
+
+.bg1{background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);}
+.bg2{background:linear-gradient(135deg,#ff512f,#dd2476);}
+.bg3{background:linear-gradient(135deg,#1d2671,#c33764);}
+.bg4{background:linear-gradient(135deg,#000428,#004e92);}
+.bg5{background:linear-gradient(135deg,#42275a,#734b6d);}
+.bgPhoto{background:linear-gradient(135deg,#000000,#434343);}
+
+.container{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+.step{display:none;animation:fade 1s;}
+.active{display:block;}
+
+button{
+margin-top:20px;
+padding:12px 25px;
+border:none;
+border-radius:25px;
+background:#ff007f;
+color:white;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 0 15px #ff007f;
+}
+
+button:hover{transform:scale(1.1);}
+
+@keyframes fade{
+from{opacity:0}
+to{opacity:1}
+}
+
+#effects{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+overflow:hidden;
+z-index:0;
+pointer-events:none;
+}
+
+.balloon{
+position:absolute;
+width:40px;
+height:50px;
+border-radius:50%;
+bottom:-60px;
+animation:floatUp linear forwards;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+}
+
+/* gallery */
+
+#photoPage{
+display:none;
+height:100vh;
+padding-top:20px;
+overflow:auto;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+padding:20px;
+max-width:900px;
+margin:auto;
+}
+
+.photo{
+height:200px;
+border:3px solid #ff007f;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 0 15px #ff007f;
+background:black;
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+cursor:pointer;
+}
+
+.title{
+font-size:30px;
+text-shadow:0 0 10px pink;
+}
+
+/* viewer */
+
+#viewer{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+}
+
+#viewer img{
+max-width:80%;
+max-height:70%;
+border:5px solid white;
+border-radius:10px;
+}
+
+.closeBtn{
+margin-top:10px;
+padding:10px 20px;
+background:#ff007f;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+/* LAST PAGE */
+
+#lastPage{
+display:none;
+height:100vh;
+padding:40px;
+overflow:auto;
+position:relative;
+}
+
+/* blurred bg */
+
+#lastPage::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:url("2.jpeg") center/cover no-repeat;
+filter:blur(8px);
+z-index:-1;
+}
+
+.messageBox{
+max-width:700px;
+margin:auto;
+background:rgba(0,0,0,0.6);
+padding:25px;
+border-radius:15px;
+box-shadow:0 0 20px pink;
+font-size:18px;
+line-height:1.6;
+}
+
+.nextBtn{
+margin-top:20px;
+padding:12px 25px;
+border:none;
+border-radius:20px;
+background:#ff007f;
+color:white;
+cursor:pointer;
+}
+
+.emoji{
+position:fixed;
+font-size:25px;
+animation:fall 3s linear forwards;
+z-index:999;
+}
+
+@keyframes fall{
+0%{top:-20px}
+100%{top:110%}
+}
+
+</style>
+</head>
+
+<body class="bg1">
+
+<div id="effects"></div>
+
+<!-- MAIN -->
+
+<div class="container" id="mainPage">
+
+<div id="step1" class="step active">
+<h1>Ready for your surprise?</h1>
+<button onclick="nextStep(2,'bg2')">Start</button>
+</div>
+
+<div id="step2" class="step">
+<h1>Today is special 💖</h1>
+<button onclick="nextStep(3,'bg3')">Next</button>
+</div>
+
+<div id="step3" class="step">
+<h1>Happy Birthday Rowdyyy 🎂</h1>
+<button onclick="nextStep(4,'bg4')">Next</button>
+</div>
+
+<div id="step4" class="step">
+<h2>Message for you 💌</h2>
+<p>
+Happy Birthday to my rowdyy 💗  
+You are one of the most genuine and beautiful souls I’ve ever met  
+</p>
+<button onclick="nextStep(5,'bg5')">Celebrate</button>
+</div>
+
+<div id="step5" class="step">
+<h2>Click to play surprise music 🎵</h2>
+<button onclick="celebrate()">Play Music</button>
+</div>
+
+</div>
+
+<!-- PHOTO PAGE -->
+
+<div id="photoPage">
+
+<h1 class="title">Memories With You 💖</h1>
+
+<div class="gallery">
+
+<div class="photo"><img src="1.jpeg" onclick="openViewer(this)"></div>
+<div class="photo"><img src="2.jpeg" onclick="openViewer(this)"></div>
+<div class="photo"><img src="3.jpeg" onclick="openViewer(this)"></div>
+<div class="photo"><img src="4.jpeg" onclick="openViewer(this)"></div>
+<div class="photo"><img src="5 .jpeg" onclick="openViewer(this)"></div>
+<div class="photo"><img src="6 .jpeg" onclick="openViewer(this)"></div>
+
+</div>
+
+<button class="nextBtn" onclick="openLastPage()">Next →</button>
+
+</div>
+
+<!-- VIEWER -->
+
+<div id="viewer">
+<img id="bigImg">
+<button class="closeBtn" onclick="closeViewer()">Close</button>
+</div>
+
+<!-- LAST PAGE -->
+
+<div id="lastPage">
+
+<div class="messageBox">
+
+<h2>Happy Birthday to my rowdyy💗</h2>
+
+<p>
+Happy Birthday to my rowdyy💗
+
+You are one of the most genuine, kind, and beautiful souls I’ve ever met🥰And I’m really grateful that life gave me you as my best friend.
+<p>
+    I love how we can talk about anything and everything from serious life stuff to the most random nonsense😜Those moments mean more to me✨We may tease each other, fight sometimes, and act like idiots, but deep down I know our bond is unbreakable ♾️
+</p>
+</p>
+
+<button class="nextBtn" onclick="celebrateMore()">
+Lets celebrate more 🎉
+</button>
+
+</div>
+
+</div>
+
+<audio id="music" src="song (mp3cut.net).mp3"></audio>
+
+<script>
+
+let current=1
+
+function nextStep(n,bg){
+document.body.className=bg
+document.getElementById("step"+current).classList.remove("active")
+document.getElementById("step"+n).classList.add("active")
+current=n
+}
+
+function celebrate(){
+
+document.getElementById("music").play()
+
+let area=document.getElementById("effects")
+
+for(let i=0;i<25;i++){
+
+let b=document.createElement("div")
+b.className="balloon"
+b.style.left=Math.random()*100+"%"
+b.style.background=randomColor()
+area.appendChild(b)
+
+}
+
+setTimeout(showPhotos,4000)
+
+}
+
+function showPhotos(){
+mainPage.style.display="none"
+photoPage.style.display="block"
+document.body.className="bgPhoto"
+}
+
+function openViewer(img){
+viewer.style.display="flex"
+bigImg.src=img.src
+}
+
+function closeViewer(){
+viewer.style.display="none"
+}
+
+function openLastPage(){
+photoPage.style.display="none"
+lastPage.style.display="block"
+}
+
+function celebrateMore(){
+
+for(let i=0;i<40;i++){
+
+let e=document.createElement("div")
+e.className="emoji"
+
+let emojis=["💗","🎉","🥰","✨","💖","😍","🎊","❤️"]
+
+e.innerText=emojis[Math.floor(Math.random()*emojis.length)]
+e.style.left=Math.random()*100+"%"
+
+document.body.appendChild(e)
+
+}
+
+fireworks()
+
+}
+
+function fireworks(){
+
+let colors=["red","yellow","cyan","lime","orange","pink","white"]
+
+for(let i=0;i<20;i++){
+
+setTimeout(()=>{
+
+let f=document.createElement("div")
+
+f.style.position="fixed"
+f.style.width="6px"
+f.style.height="6px"
+f.style.borderRadius="50%"
+f.style.background=colors[Math.floor(Math.random()*colors.length)]
+f.style.left=Math.random()*100+"%"
+f.style.top=Math.random()*60+"%"
+f.style.boxShadow="0 0 20px 5px "+f.style.background
+f.style.zIndex="9999"
+
+document.body.appendChild(f)
+
+setTimeout(()=>{f.remove()},1000)
+
+},i*150)
+
+}
+
+}
+
+function randomColor(){
+let colors=["#ff007f","#00ffff","#ffff00","#ff6600","#33ff33"]
+return colors[Math.floor(Math.random()*colors.length)]
+}
+
+</script>
+
+</body>
+</html>
